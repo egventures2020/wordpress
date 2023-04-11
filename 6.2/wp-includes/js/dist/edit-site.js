@@ -7934,7 +7934,13 @@ function SidebarNavigationScreenNavigationMenus() {
   const orderedNavigationMenus = (0,external_wp_element_namespaceObject.useMemo)(() => navigationMenus === null || navigationMenus === void 0 ? void 0 : navigationMenus.sort((menuA, menuB) => {
     const menuADate = new Date(menuA.date);
     const menuBDate = new Date(menuB.date);
-    return menuADate.getTime() > menuBDate.getTime();
+    if (menuADate.getTime() > menuBDate.getTime()) {
+      return 1;
+    } else if (menuADate.getTime() < menuBDate.getTime()) {
+        return -1;
+    } else {
+        return 0;
+    }
   }), [navigationMenus]);
   const firstNavigationMenu = orderedNavigationMenus === null || orderedNavigationMenus === void 0 ? void 0 : (_orderedNavigationMen = orderedNavigationMenus[0]) === null || _orderedNavigationMen === void 0 ? void 0 : _orderedNavigationMen.id;
   const blocks = (0,external_wp_element_namespaceObject.useMemo)(() => {
