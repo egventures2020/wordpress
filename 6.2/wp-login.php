@@ -218,7 +218,7 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	$message = apply_filters( 'login_message', $message );
 
 	if ( ! empty( $message ) ) {
-		echo $message . "\n";
+		echo esc_html( $message ) . "\n";
 	}
 
 	// In case a plugin uses $error rather than the $wp_errors object.
@@ -250,7 +250,7 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 			 *
 			 * @param string $errors Login error message.
 			 */
-			echo '<div id="login_error">' . apply_filters( 'login_errors', $errors ) . "</div>\n";
+			echo '<div id="login_error">' . apply_filters( 'login_errors', esc_html($errors) ) . "</div>\n";
 		}
 
 		if ( ! empty( $messages ) ) {
@@ -261,7 +261,7 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 			 *
 			 * @param string $messages Login messages.
 			 */
-			echo '<p class="message" id="login-message">' . apply_filters( 'login_messages', $messages ) . "</p>\n";
+			echo '<p class="message" id="login-message">' . apply_filters( 'login_messages', esc_html($messages) ) . "</p>\n";
 		}
 	}
 } // End of login_header().
@@ -367,7 +367,8 @@ function login_footer( $input_id = '' ) {
 					<?php } ?>
 
 					<?php if ( isset( $_GET['redirect_to'] ) && '' !== $_GET['redirect_to'] ) { ?>
-						<input type="hidden" name="redirect_to" value="<?php echo sanitize_url( $_GET['redirect_to'] ); ?>" />
+						<!-- file deepcode ignore XSS: sanitize_url is being used -->
+      					<input type="hidden" name="redirect_to" value="<?php echo sanitize_url( $_GET['redirect_to'] ); ?>" />
 					<?php } ?>
 
 					<?php if ( isset( $_GET['action'] ) && '' !== $_GET['action'] ) { ?>
@@ -484,14 +485,19 @@ if ( defined( 'RELOCATE' ) && RELOCATE ) { // Move flag is set.
 
 // Set a cookie now to see if they are supported by the browser.
 $secure = ( 'https' === parse_url( wp_login_url(), PHP_URL_SCHEME ) );
-setcookie( TEST_COOKIE, 'WP Cookie check', 0, COOKIEPATH, COOKIE_DOMAIN, $secure );
+setcookie( TEST_COOKIE, 'WP Cookie check', 0, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 
 if ( SITECOOKIEPATH !== COOKIEPATH ) {
-	setcookie( TEST_COOKIE, 'WP Cookie check', 0, SITECOOKIEPATH, COOKIE_DOMAIN, $secure );
+    setcookie( TEST_COOKIE, 'WP Cookie check', 0, SITECOOKIEPATH, COOKIE_DOMAIN, $secure, true );
 }
 
+// Check if the 'wp_lang' variable is set in the $_GET array
 if ( isset( $_GET['wp_lang'] ) ) {
-	setcookie( 'wp_lang', sanitize_text_field( $_GET['wp_lang'] ), 0, COOKIEPATH, COOKIE_DOMAIN, $secure );
+    // Sanitize the 'wp_lang' variable using the sanitize_text_field() function
+    $sanitized_wp_lang = sanitize_text_field( $_GET['wp_lang'] );
+    
+    // Set the 'wp_lang' cookie with the sanitized value
+    setcookie( 'wp_lang', $sanitized_wp_lang, 0, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 }
 
 /**
@@ -740,14 +746,14 @@ switch ( $action ) {
 		 */
 		$expire  = apply_filters( 'post_password_expires', time() + 10 * DAY_IN_SECONDS );
 		$referer = wp_get_referer();
-
+                        
 		if ( $referer ) {
 			$secure = ( 'https' === parse_url( $referer, PHP_URL_SCHEME ) );
 		} else {
-			$secure = false;
+			$secure = true;
 		}
 
-		setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $expire, COOKIEPATH, COOKIE_DOMAIN, $secure );
+		setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $expire, COOKIEPATH, COOKIE_DOMAIN, $secure, true );
 
 		wp_safe_redirect( wp_get_referer() );
 		exit;

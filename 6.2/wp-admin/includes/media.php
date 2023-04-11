@@ -2058,15 +2058,16 @@ function get_compat_media_markup( $attachment_id, $args = null ) {
  * @since 2.5.0
  */
 function media_upload_header() {
-	$post_id = isset( $_REQUEST['post_id'] ) ? (int) $_REQUEST['post_id'] : 0;
+    $post_id = isset($_REQUEST['post_id']) ? (int) $_REQUEST['post_id'] : 0;
+    $sanitized_post_id = esc_js($post_id);
 
-	echo '<script type="text/javascript">post_id = ' . $post_id . ';</script>';
+    echo '<script type="text/javascript">post_id = ' . $sanitized_post_id . ';</script>';
 
-	if ( empty( $_GET['chromeless'] ) ) {
-		echo '<div id="media-upload-header">';
-		the_media_upload_tabs();
-		echo '</div>';
-	}
+    if (empty($_GET['chromeless'])) {
+        echo '<div id="media-upload-header">';
+        the_media_upload_tabs();
+        echo '</div>';
+    }
 }
 
 /**
@@ -2813,22 +2814,34 @@ function media_upload_library_form( $errors ) {
 
 	<div class="tablenav">
 
-		<?php
-		$page_links = paginate_links(
-			array(
-				'base'      => add_query_arg( 'paged', '%#%' ),
-				'format'    => '',
-				'prev_text' => __( '&laquo;' ),
-				'next_text' => __( '&raquo;' ),
-				'total'     => ceil( $wp_query->found_posts / 10 ),
-				'current'   => $q['paged'],
-			)
-		);
+	<?php
+	$page_links = paginate_links(
+		array(
+			'base'      => add_query_arg( 'paged', '%#%' ),
+			'format'    => '',
+			'prev_text' => __( '&laquo;' ),
+			'next_text' => __( '&raquo;' ),
+			'total'     => ceil( $wp_query->found_posts / 10 ),
+			'current'   => $q['paged'],
+		)
+	);
 
-		if ( $page_links ) {
-			echo "<div class='tablenav-pages'>$page_links</div>";
-		}
-		?>
+	if ( $page_links ) {
+		$allowed_tags = array(
+			'div' => array(
+				'class' => array(),
+			),
+			'a'   => array(
+				'href' => array(),
+				'class' => array(),
+			),
+			'span' => array(
+				'class' => array(),
+			),
+		);
+		echo wp_kses( "<div class='tablenav-pages'>$page_links</div>", $allowed_tags );
+	}
+	?>
 
 	<div class="alignleft actions">
 		<?php
