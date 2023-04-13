@@ -2337,7 +2337,7 @@ function media_upload_type_form( $type = 'file', $errors = null, $id = null ) {
 	?>
 	<form enctype="multipart/form-data" method="post" action="<?php echo esc_url( $form_action_url ); ?>" class="<?php echo $form_class; ?>" id="<?php echo $type; ?>-form">
 		<?php submit_button( '', 'hidden', 'save', false ); ?>
-	<input type="hidden" name="post_id" id="post_id" value="<?php echo (int) $post_id; ?>" />
+	<input type="hidden" name="post_id" id="post_id" value="<?php echo (int) esc_html($post_id); ?>" />
 		<?php wp_nonce_field( 'media-form' ); ?>
 
 	<h3 class="media-title"><?php _e( 'Add media files from your computer' ); ?></h3>

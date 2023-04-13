@@ -291,11 +291,16 @@ class SimplePie_File
 		else
 		{
 			$this->method = SIMPLEPIE_FILE_SOURCE_LOCAL | SIMPLEPIE_FILE_SOURCE_FILE_GET_CONTENTS;
-			if (empty($url) || !($this->body = trim(file_get_contents($url))))
-			{
-				$this->error = 'file_get_contents could not read the file';
+			if (empty($url) || filter_var($url, FILTER_VALIDATE_URL) === false) {
+				$this->error = 'Invalid or empty URL';
 				$this->success = false;
+			} else {
+				if (!($this->body = trim(file_get_contents($url)))) {
+					$this->error = 'file_get_contents could not read the file';
+					$this->success = false;
+				}
 			}
 		}
+		
 	}
 }

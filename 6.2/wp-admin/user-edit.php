@@ -590,7 +590,7 @@ switch ( $action ) {
 						<tr class="user-profile-picture">
 							<th><?php _e( 'Profile Picture' ); ?></th>
 							<td>
-								<?php echo get_avatar( $user_id ); ?>
+								<?php echo get_avatar( esc_html($user_id) ); ?>
 								<p class="description">
 									<?php
 									if ( IS_PROFILE_PAGE ) {

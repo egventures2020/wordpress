@@ -4041,7 +4041,7 @@ function _jsonp_wp_die_handler( $message, $title = '', $args = array() ) {
 
 	$result         = wp_json_encode( $data );
 	$jsonp_callback = $_GET['_jsonp'];
-	echo '/**/' . $jsonp_callback . '(' . $result . ')';
+	echo esc_html('/**/' . $jsonp_callback . '(' . $result . ')');
 	if ( $parsed_args['exit'] ) {
 		die();
 	}

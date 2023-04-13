@@ -6,7 +6,15 @@
  * @subpackage Administration
  */
 
-if ( isset( $_REQUEST['action'] ) && 'upload-attachment' === $_REQUEST['action'] ) {
+$action = isset($_REQUEST['action']) ? sanitize_text_field($_REQUEST['action']) : '';
+$attachment_id = isset($_REQUEST['attachment_id']) ? absint($_REQUEST['attachment_id']) : 0;
+$fetch = isset($_REQUEST['fetch']) ? absint($_REQUEST['fetch']) : 0;
+$post_id = isset($_REQUEST['post_id']) ? absint($_REQUEST['post_id']) : 0;
+$short = isset($_REQUEST['short']) ? filter_var($_REQUEST['short'], FILTER_VALIDATE_BOOLEAN) : false;
+$type = isset($_REQUEST['type']) ? sanitize_text_field($_REQUEST['type']) : '';
+
+
+if ( isset( $action ) && 'upload-attachment' === $action ) {
 	define( 'DOING_AJAX', true );
 }
 
@@ -24,7 +32,7 @@ require_once ABSPATH . 'wp-admin/admin.php';
 
 header( 'Content-Type: text/plain; charset=' . get_option( 'blog_charset' ) );
 
-if ( isset( $_REQUEST['action'] ) && 'upload-attachment' === $_REQUEST['action'] ) {
+if ( isset( $action ) && 'upload-attachment' === $action ) {
 	require ABSPATH . 'wp-admin/includes/ajax-actions.php';
 
 	send_nosniff_header();
@@ -39,14 +47,14 @@ if ( ! current_user_can( 'upload_files' ) ) {
 }
 
 // Just fetch the detail form for that attachment.
-if ( isset( $_REQUEST['attachment_id'] ) && (int) $_REQUEST['attachment_id'] && $_REQUEST['fetch'] ) {
-	$id   = (int) $_REQUEST['attachment_id'];
+if ( isset( $attachment_id ) && (int) $attachment_id && $fetch ) {
+	$id   = (int) $attachment_id;
 	$post = get_post( $id );
 	if ( 'attachment' !== $post->post_type ) {
 		wp_die( __( 'Invalid post type.' ) );
 	}
 
-	switch ( $_REQUEST['fetch'] ) {
+	switch ( $fetch ) {
 		case 3:
 			?>
 			<div class="media-item-wrapper">
@@ -69,7 +77,7 @@ if ( isset( $_REQUEST['attachment_id'] ) && (int) $_REQUEST['attachment_id'] && 
 				</div>
 				<div class="attachment-tools">
 					<span class="media-item-copy-container copy-to-clipboard-container edit-attachment">
-						<button type="button" class="button button-small copy-attachment-url" data-clipboard-text="<?php echo $file_url; ?>"><?php _e( 'Copy URL to clipboard' ); ?></button>
+						<button type="button" class="button button-small copy-attachment-url" data-clipboard-text="<?php echo esc_url($file_url); ?>"><?php _e( 'Copy URL to clipboard' ); ?></button>
 						<span class="success hidden" aria-hidden="true"><?php _e( 'Copied!' ); ?></span>
 					</span>
 					<?php
@@ -104,8 +112,8 @@ if ( isset( $_REQUEST['attachment_id'] ) && (int) $_REQUEST['attachment_id'] && 
 check_admin_referer( 'media-form' );
 
 $post_id = 0;
-if ( isset( $_REQUEST['post_id'] ) ) {
-	$post_id = absint( $_REQUEST['post_id'] );
+if ( isset( $post_id ) ) {
+	$post_id = absint( $post_id );
 	if ( ! get_post( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
 		$post_id = 0;
 	}
@@ -129,12 +137,11 @@ if ( is_wp_error( $id ) ) {
 	exit;
 }
 
-if ( $_REQUEST['short'] ) {
+if ( $short ) {
 	// Short form response - attachment ID only.
 	echo $id;
 } else {
 	// Long form response - big chunk of HTML.
-	$type = $_REQUEST['type'];
 
 	/**
 	 * Filters the returned ID of an uploaded attachment.
@@ -152,5 +159,6 @@ if ( $_REQUEST['short'] ) {
 	 *
 	 * @param int $id Uploaded attachment ID.
 	 */
-	echo apply_filters( "async_upload_{$type}", $id );
+	
+	echo esc_html(apply_filters( "async_upload_{$type}", $id ));
 }

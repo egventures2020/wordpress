@@ -134,8 +134,8 @@ $page_hook = null;
 $editing = false;
 
 if ( isset( $_GET['page'] ) ) {
-	$plugin_page = wp_unslash( $_GET['page'] );
-	$plugin_page = plugin_basename( $plugin_page );
+    $plugin_page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+    $plugin_page = plugin_basename( $plugin_page );
 }
 
 if ( isset( $_REQUEST['post_type'] ) && post_type_exists( $_REQUEST['post_type'] ) ) {
@@ -286,7 +286,8 @@ if ( isset( $plugin_page ) ) {
 		if ( ! isset( $_GET['noheader'] ) ) {
 			require_once ABSPATH . 'wp-admin/admin-header.php';
 		}
-
+		$plugin_page = sanitize_text_field($plugin_page);
+		
 		if ( file_exists( WPMU_PLUGIN_DIR . "/$plugin_page" ) ) {
 			include WPMU_PLUGIN_DIR . "/$plugin_page";
 		} else {
@@ -299,7 +300,7 @@ if ( isset( $plugin_page ) ) {
 	exit;
 } elseif ( isset( $_GET['import'] ) ) {
 
-	$importer = $_GET['import'];
+	$importer = sanitize_text_field( $_GET['import'] );
 
 	if ( ! current_user_can( 'import' ) ) {
 		wp_die( __( 'Sorry, you are not allowed to import content into this site.' ) );

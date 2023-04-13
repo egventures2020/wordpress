@@ -540,7 +540,7 @@ class WP_REST_Server {
 			if ( $jsonp_callback ) {
 				// Prepend '/**/' to mitigate possible JSONP Flash attacks.
 				// https://miki.it/blog/2014/7/8/abusing-jsonp-with-rosetta-flash/
-				echo '/**/' . $jsonp_callback . '(' . $result . ')';
+				echo esc_html('/**/' . $jsonp_callback . '(' . $result . ')');
 			} else {
 				echo $result;
 			}

@@ -35,10 +35,10 @@ header( "Cache-Control: public, max-age=$expires_offset" );
 
 $file = get_file( $basepath . '/wp-tinymce.js' );
 if ( isset( $_GET['c'] ) && $file ) {
-	echo $file;
+	echo sanitize_file_name($file);
 } else {
 	// Even further back compat.
-	echo get_file( $basepath . '/tinymce.min.js' );
-	echo get_file( $basepath . '/plugins/compat3x/plugin.min.js' );
+	echo esc_html(get_file( $basepath . '/tinymce.min.js' ));
+	echo esc_html(get_file( $basepath . '/plugins/compat3x/plugin.min.js' ));
 }
 exit;

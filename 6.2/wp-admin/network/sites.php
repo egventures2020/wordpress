@@ -386,7 +386,7 @@ if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 
 <?php $wp_list_table->views(); ?>
 
-<?php echo $msg; ?>
+<?php echo esc_html($msg); ?>
 
 <form method="get" id="ms-search" class="wp-clearfix">
 <?php $wp_list_table->search_box( __( 'Search Sites' ), 'site' ); ?>

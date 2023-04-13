@@ -138,7 +138,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	<h1><?php echo esc_html( $title ); ?></h1>
 
 	<?php if ( is_wp_error( $error ) ) : ?>
-		<div class="notice notice-error"><p><?php echo $error->get_error_message(); ?></p></div>
+		<div class="notice notice-error"><p><?php echo esc_html($error->get_error_message()); ?></p></div>
 	<?php endif; ?>
 
 	<div class="card auth-app-card">

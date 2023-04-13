@@ -114,7 +114,7 @@ if ( isset( $add_user_errors ) && is_wp_error( $add_user_errors ) ) {
 	<div id="message" class="notice notice-error is-dismissible">
 		<?php
 		foreach ( $add_user_errors->get_error_messages() as $error ) {
-			echo "<p>$error</p>";
+			echo "<p>" . esc_html($error) . "</p>";
 		}
 		?>
 	</div>

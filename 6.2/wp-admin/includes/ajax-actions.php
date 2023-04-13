@@ -173,7 +173,7 @@ function wp_ajax_ajax_tag_search() {
 	 */
 	$results = apply_filters( 'ajax_term_search_results', $results, $taxonomy_object, $search );
 
-	echo implode( "\n", $results );
+	echo implode( "\n", esc_html($results) );
 	wp_die();
 }
 
@@ -1209,7 +1209,7 @@ function wp_ajax_get_tagcloud() {
 		wp_die( 0 );
 	}
 
-	echo $return;
+	echo esc_html($return);
 	wp_die();
 }
 
@@ -3888,7 +3888,7 @@ function wp_ajax_parse_media_shortcode() {
 
 	ob_start();
 
-	echo $parsed;
+	echo esc_html($parsed);
 
 	if ( 'playlist' === $_REQUEST['type'] ) {
 		wp_underscore_playlist_templates();

@@ -640,7 +640,7 @@ if ( isset( $_GET['error'] ) ) :
 	}
 
 	?>
-	<div id="message" class="error"><p><?php echo $errmsg; ?></p>
+	<div id="message" class="error"><p><?php echo esc_html($errmsg); ?></p>
 	<?php
 
 	if ( ! isset( $_GET['main'] ) && ! isset( $_GET['charsout'] )

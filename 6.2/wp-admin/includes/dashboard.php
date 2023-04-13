@@ -1752,7 +1752,26 @@ function wp_dashboard_browser_nag() {
 	 * @param array|false $response An array containing web browser information, or
 	 *                              false on failure. See wp_check_browser_version().
 	 */
-	echo apply_filters( 'browse-happy-notice', $notice, $response ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+	// Define the allowed HTML tags and attributes.
+	$allowed_html = array(
+		'div' => array(
+			'class' => array(),
+		),
+		'img' => array(
+			'src' => array(),
+			'alt' => array(),
+		),
+		'p' => array(
+			'class' => array(),
+		),
+		'a' => array(
+			'href' => array(),
+			'class' => array(),
+			'aria-label' => array(),
+		),
+	);
+
+	echo wp_kses(apply_filters('browse-happy-notice', $notice, esc_html($response)), $allowed_html); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 }
 
 /**

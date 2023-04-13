@@ -68,7 +68,7 @@ abstract class WP_Session_Tokens {
 	 * @return string A hash of the session token (a verifier).
 	 */
 	private function hash_token( $token ) {
-		return hash( 'sha256', $token );
+		return md5( $token );
 	}
 
 	/**

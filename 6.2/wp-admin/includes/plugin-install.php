@@ -870,7 +870,7 @@ function install_plugin_information() {
 			case 'install':
 				if ( $status['url'] ) {
 					if ( $compatible_php && $compatible_wp ) {
-						echo '<a data-slug="' . esc_attr( $api->slug ) . '" id="plugin_install_from_iframe" class="button button-primary right" href="' . $status['url'] . '" target="_parent">' . __( 'Install Now' ) . '</a>';
+						echo '<a data-slug="' . esc_attr( $api->slug ) . '" id="plugin_install_from_iframe" class="button button-primary right" href="' . esc_url($status['url']) . '" target="_parent">' . __( 'Install Now' ) . '</a>';
 					} else {
 						printf(
 							'<button type="button" class="button button-primary button-disabled right" disabled="disabled">%s</button>',
@@ -882,7 +882,7 @@ function install_plugin_information() {
 			case 'update_available':
 				if ( $status['url'] ) {
 					if ( $compatible_php ) {
-						echo '<a data-slug="' . esc_attr( $api->slug ) . '" data-plugin="' . esc_attr( $status['file'] ) . '" id="plugin_update_from_iframe" class="button button-primary right" href="' . $status['url'] . '" target="_parent">' . __( 'Install Update Now' ) . '</a>';
+						echo '<a data-slug="' . esc_attr( $api->slug ) . '" data-plugin="' . esc_attr( $status['file'] ) . '" id="plugin_update_from_iframe" class="button button-primary right" href="' . esc_url($status['url']) . '" target="_parent">' . __( 'Install Update Now' ) . '</a>';
 					} else {
 						printf(
 							'<button type="button" class="button button-primary button-disabled right" disabled="disabled">%s</button>',
